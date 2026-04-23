@@ -5,485 +5,558 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>삼다컨테스트 레벨업 실적 대시보드</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box !important; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box !important; }
   :root {
-    --primary: #E60012; --primary-dark: #b0000d; --primary-light: #ff4d5e;
-    --grade1: #1565C0; --grade1-bg: #E3F2FD; --grade1-border: #90CAF9;
-    --grade2: #2E7D32; --grade2-bg: #E8F5E9; --grade2-border: #A5D6A7;
-    --grade3: #E65100; --grade3-bg: #FFF3E0; --grade3-border: #FFCC80;
-    --levelY: #6A1B9A; --levelY-bg: #F3E5F5; --levelY-border: #CE93D8;
-    --bg: #F5F5F5; --card-bg: #FFFFFF; --header-bg: #ECEFF1;
-    --text: #212121; --text-sub: #757575; --border: #E0E0E0;
-    --shadow: 0 2px 8px rgba(0,0,0,0.10);
-    --radius: 12px;
-    /* 대리점 색상 */
-    --c-js: #1565C0; --c-seoguipo: #00838F; --c-smile: #558B2F;
-    --c-anyu: #AD1457; --c-oreum: #4527A0; --c-jeju: #E65100;
-    --c-jejuet: #00695C; --c-jejugwangyang: #1976D2; --c-jejugoodmorning: #F57F17;
-    --c-jejujeongdaun: #6A1B9A; --c-jejujungang: #37474F;
+    --primary: #E60012;
+    --primary-dark: #b0000d;
+    --primary-light: #ff4d5e;
+    --bg: #f4f6fb;
+    --card-bg: #fff;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --grade1: #1d4ed8;
+    --grade1-bg: #dbeafe;
+    --grade2: #d97706;
+    --grade2-bg: #fef3c7;
+    --grade3: #6b7280;
+    --grade3-bg: #f3f4f6;
+    --levelup-y: #059669;
+    --levelup-y-bg: #d1fae5;
+    --levelup-n: #dc2626;
+    --levelup-n-bg: #fee2e2;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+    --radius: 14px;
+    --radius-sm: 8px;
   }
-  html, body { height: 100%; font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
-  a { text-decoration: none; color: inherit; }
+  html, body { margin:0; padding:0; background:var(--bg); font-family:'Pretendard','Noto Sans KR',sans-serif; color:var(--text); min-width:320px; }
+  body { overflow-x:hidden; }
 
-  /* ── HEADER ── */
+  /* ===== HEADER ===== */
   .dashboard-header {
-    background: linear-gradient(135deg, #E60012 0%, #b0000d 100%);
-    color: #fff; text-align: center; padding: 28px 20px 18px;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 4px 16px rgba(230,0,18,0.25);
+    background: linear-gradient(135deg, #E60012 0%, #b0000d 60%, #7a0009 100%);
+    color:#fff;
+    text-align:center;
+    padding: 36px 20px 24px;
+    position:relative;
+    box-shadow: 0 4px 20px rgba(230,0,18,0.25);
   }
-  .dashboard-header h1 { font-size: 40px; font-weight: 900; letter-spacing: -1px; text-shadow: 0 2px 8px rgba(0,0,0,0.18); }
-  .dashboard-header .date-label { font-size: 10px; font-weight: 700; margin-top: 6px; opacity: 0.88; letter-spacing: 2px; }
+  .dashboard-header h1 {
+    font-size:40px;
+    font-weight:900;
+    margin:0 0 8px;
+    letter-spacing:-1px;
+    text-shadow:0 2px 8px rgba(0,0,0,0.18);
+  }
+  .dashboard-header .date-label {
+    font-size:10px;
+    font-weight:700;
+    color:rgba(255,255,255,0.85);
+    letter-spacing:2px;
+    text-transform:uppercase;
+  }
+  .header-deco {
+    position:absolute; bottom:0; left:0; right:0; height:6px;
+    background: linear-gradient(90deg,#fff2,#fff6,#fff2);
+  }
 
-  /* ── TOP CARDS ── */
-  .top-cards-section { padding: 20px 16px 8px; }
-  .top-cards-section h2 { font-size: 1rem; font-weight: 700; color: var(--text-sub); margin-bottom: 12px; letter-spacing: 1px; }
+  /* ===== TOP CARDS ===== */
+  .top-cards-section { padding:28px 20px 10px; }
+  .top-cards-section h2 { font-size:1rem; font-weight:700; color:var(--text-muted); margin:0 0 14px; letter-spacing:1px; text-transform:uppercase; }
   .top-cards-grid {
-    display: grid;
+    display:grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
+    gap:14px;
   }
   .top-card {
-    background: var(--card-bg); border-radius: var(--radius);
-    padding: 16px 18px 14px; box-shadow: var(--shadow);
-    border-left: 5px solid #ccc; min-width: 160px; min-height: 100px;
-    transition: transform .15s, box-shadow .15s; cursor: default;
-    position: relative; overflow: hidden;
+    background:var(--card-bg);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    box-shadow:var(--shadow);
+    border-top:5px solid var(--card-accent, #E60012);
+    min-width:160px;
+    transition:transform .18s, box-shadow .18s;
+    position:relative;
+    overflow:hidden;
   }
-  .top-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.14); }
-  .top-card .agency-name { font-size: 0.72rem; font-weight: 700; color: var(--text-sub); letter-spacing: 1px; margin-bottom: 4px; }
-  .top-card .store-name { font-size: 1.15rem; font-weight: 900; line-height: 1.2; }
-  .top-card .crown { font-size: 1.4rem; position: absolute; top: 12px; right: 14px; }
-  .top-card .score { font-size: 1.1rem; font-weight: 400; margin-top: 6px; color: var(--text-sub); }
-  .top-card .grade-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 6px; }
+  .top-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+  .top-card .agency-name { font-size:0.72rem; font-weight:700; color:var(--text-muted); letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
+  .top-card .store-name { font-size:1.35rem; font-weight:900; color:var(--text); line-height:1.2; margin-bottom:4px; }
+  .top-card .crown { font-size:1.5rem; position:absolute; top:14px; right:14px; }
+  .top-card .score { font-size:1.1rem; font-weight:400; color:var(--text-muted); }
+  .top-card .grade-badge { display:inline-block; margin-top:6px; padding:2px 10px; border-radius:20px; font-size:0.75rem; font-weight:700; }
 
-  /* ── TABS ── */
-  .tabs-wrapper { position: sticky; top: 110px; z-index: 90; background: var(--bg); padding: 0 16px; border-bottom: 2px solid var(--border); }
-  .tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
-  .tabs::-webkit-scrollbar { display: none; }
+  /* ===== TABS ===== */
+  .tabs-wrapper {
+    position:sticky; top:0; z-index:100;
+    background:var(--bg);
+    padding:14px 20px 0;
+    border-bottom:2px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tabs { display:flex; gap:4px; overflow-x:auto; padding-bottom:0; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
   .tab-btn {
-    flex-shrink: 0; padding: 12px 18px; font-size: 0.88rem; font-weight: 700;
-    border: none; background: transparent; cursor: pointer; color: var(--text-sub);
-    border-bottom: 3px solid transparent; transition: all .15s; white-space: nowrap;
+    flex-shrink:0;
+    padding:10px 20px;
+    border:none; background:none; cursor:pointer;
+    font-size:0.92rem; font-weight:600; color:var(--text-muted);
+    border-bottom:3px solid transparent;
+    border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+    transition:all .18s;
+    white-space:nowrap;
   }
-  .tab-btn:hover { color: var(--primary); }
-  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-  .tab-btn .tab-count { display: inline-block; background: var(--border); color: var(--text-sub); font-size: 0.7rem; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
-  .tab-btn.active .tab-count { background: var(--primary-light); color: #fff; }
+  .tab-btn:hover { background:rgba(230,0,18,0.06); color:var(--primary); }
+  .tab-btn.active { color:var(--primary); border-bottom-color:var(--primary); background:rgba(230,0,18,0.07); }
 
-  /* ── TABLE SECTION ── */
-  .table-section { padding: 16px; overflow-x: auto; min-height: 300px; }
-  .table-wrap { overflow-x: auto; overflow-y: auto; border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card-bg); }
-  table { width: 100%; border-collapse: collapse; min-width: 900px; }
-  thead tr { background: var(--header-bg) !important; position: sticky; top: 0; z-index: 10; }
+  /* ===== CONTENT ===== */
+  .tab-content { display:none; padding:20px; }
+  .tab-content.active { display:block; }
+
+  /* ===== TABLE ===== */
+  .table-wrap { overflow-x:auto; overflow-y:auto; border-radius:var(--radius); box-shadow:var(--shadow); background:var(--card-bg); }
+  table { width:100%; border-collapse:collapse; min-width:900px; }
+  thead tr { background:#f1f3f7; position:sticky; top:0; z-index:10; }
   thead th {
-    padding: 12px 14px; font-size: 0.82rem; font-weight: 700; color: var(--text-sub);
-    text-align: center; border-bottom: 2px solid var(--border); white-space: nowrap;
-    cursor: pointer; user-select: none;
+    padding:13px 14px; text-align:left; font-size:0.82rem; font-weight:700;
+    color:var(--text-muted); border-bottom:2px solid var(--border);
+    white-space:nowrap; letter-spacing:0.5px;
   }
-  thead th:hover { background: #DDE3E8 !important; }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
-  tbody tr:hover { background: #FAFAFA !important; }
-  tbody td { padding: 10px 14px; font-size: 0.85rem; text-align: center; vertical-align: middle; }
-  tbody td:first-child { text-align: left; font-weight: 700; }
+  tbody tr { border-bottom:1px solid var(--border); transition:background .12s; }
+  tbody tr:hover { background:#fef2f2; }
+  tbody td { padding:11px 14px; font-size:0.88rem; vertical-align:middle; }
+  tbody tr:nth-child(even) { background:#fafafa; }
+  tbody tr:nth-child(even):hover { background:#fef2f2; }
 
   /* rank highlight */
-  .rank-1 td:first-child { color: #E60012 !important; }
-  .rank-2 td:first-child { color: #1565C0 !important; }
-  .rank-3 td:first-child { color: #2E7D32 !important; }
-  .rank-1 { background: #FFF8F8 !important; }
-  .rank-2 { background: #F0F4FF !important; }
-  .rank-3 { background: #F0FFF2 !important; }
-  .rank-badge { display: inline-block; width: 22px; height: 22px; border-radius: 50%; font-size: 0.72rem; font-weight: 900; line-height: 22px; text-align: center; margin-right: 6px; }
-  .rank-badge-1 { background: #E60012; color: #fff; }
-  .rank-badge-2 { background: #1565C0; color: #fff; }
-  .rank-badge-3 { background: #2E7D32; color: #fff; }
-  .rank-badge-n { background: var(--border); color: var(--text-sub); }
+  .rank-1 td:first-child { background:linear-gradient(90deg,#fef9c3,transparent); }
+  .rank-2 td:first-child { background:linear-gradient(90deg,#f1f5f9,transparent); }
+  .rank-3 td:first-child { background:linear-gradient(90deg,#fef3c7,transparent); }
+  .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; font-weight:900; font-size:0.82rem; margin-right:6px; }
+  .rank-badge.r1 { background:#fbbf24; color:#fff; }
+  .rank-badge.r2 { background:#94a3b8; color:#fff; }
+  .rank-badge.r3 { background:#d97706; color:#fff; }
+
+  .store-cell { font-weight:700; font-size:0.92rem; }
+  .score-cell { font-weight:700; font-size:1rem; color:var(--primary); }
 
   /* grade badge */
-  .grade-1 { background: var(--grade1-bg); color: var(--grade1); border: 1px solid var(--grade1-border); padding: 3px 10px; border-radius: 20px; font-weight: 700; font-size: 0.78rem; white-space: nowrap; }
-  .grade-2 { background: var(--grade2-bg); color: var(--grade2); border: 1px solid var(--grade2-border); padding: 3px 10px; border-radius: 20px; font-weight: 700; font-size: 0.78rem; white-space: nowrap; }
-  .grade-3 { background: var(--grade3-bg); color: var(--grade3); border: 1px solid var(--grade3-border); padding: 3px 10px; border-radius: 20px; font-weight: 700; font-size: 0.78rem; white-space: nowrap; }
+  .grade-lbl {
+    display:inline-block; padding:3px 12px; border-radius:20px;
+    font-size:0.78rem; font-weight:700; white-space:nowrap;
+  }
+  .grade-lbl.g1 { background:var(--grade1-bg); color:var(--grade1); }
+  .grade-lbl.g2 { background:var(--grade2-bg); color:var(--grade2); }
+  .grade-lbl.g3 { background:var(--grade3-bg); color:var(--grade3); }
 
   /* level up badge */
-  .level-y { background: var(--levelY-bg); color: var(--levelY); border: 1px solid var(--levelY-border); padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; }
-  .level-n { background: #ECEFF1; color: #607D8B; border: 1px solid #B0BEC5; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; }
+  .levelup-lbl {
+    display:inline-block; padding:2px 9px; border-radius:20px;
+    font-size:0.75rem; font-weight:700;
+  }
+  .levelup-lbl.y { background:var(--levelup-y-bg); color:var(--levelup-y); }
+  .levelup-lbl.n { background:var(--levelup-n-bg); color:var(--levelup-n); }
 
-  /* arrow */
-  .arrow-up { color: #E60012; font-size: 1rem; }
-  .arrow-down { color: #1565C0; font-size: 1rem; }
-  .arrow-same { color: #9E9E9E; font-size: 1rem; }
-
-  /* score cell */
-  .score-cell { font-weight: 700; font-size: 0.95rem; }
-  .score-high { color: #E60012; }
-  .score-mid { color: #1565C0; }
-  .score-low { color: #E65100; }
+  /* arrow icons */
+  .arrow-up { color:#059669; font-size:1rem; }
+  .arrow-down { color:#dc2626; font-size:1rem; }
+  .arrow-same { color:#6b7280; font-size:1rem; }
 
   /* AI comment btn */
   .ai-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff; border: none; border-radius: 8px; padding: 5px 12px;
-    font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap;
-    transition: opacity .15s, transform .1s;
+    padding:5px 12px; border:none; border-radius:20px;
+    background:linear-gradient(135deg,#E60012,#ff4d5e);
+    color:#fff; font-size:0.75rem; font-weight:700; cursor:pointer;
+    transition:all .18s; white-space:nowrap;
+    box-shadow:0 2px 6px rgba(230,0,18,0.2);
   }
-  .ai-btn:hover { opacity: 0.85; transform: scale(1.04); }
+  .ai-btn:hover { transform:scale(1.05); box-shadow:0 4px 12px rgba(230,0,18,0.35); }
+
+  /* tooltip */
+  [data-tooltip] { position:relative; cursor:help; }
+  [data-tooltip]:hover::after {
+    content:attr(data-tooltip);
+    position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%);
+    background:#1a1a2e; color:#fff; padding:6px 12px; border-radius:8px;
+    font-size:0.75rem; white-space:nowrap; z-index:9999;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    pointer-events:none;
+  }
+  [data-tooltip]:hover::before {
+    content:''; position:absolute; bottom:calc(100% + 1px); left:50%; transform:translateX(-50%);
+    border:5px solid transparent; border-top-color:#1a1a2e; z-index:9999;
+    pointer-events:none;
+  }
 
   /* Modal */
   .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-    z-index: 1000; align-items: center; justify-content: center;
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55);
+    z-index:9000; align-items:center; justify-content:center;
+    backdrop-filter:blur(3px);
   }
-  .modal-overlay.open { display: flex; }
+  .modal-overlay.open { display:flex; }
   .modal-box {
-    background: #fff; border-radius: 16px; padding: 28px 28px 24px;
-    max-width: 520px; width: 92%; box-shadow: 0 8px 40px rgba(0,0,0,0.22);
-    position: relative; max-height: 80vh; overflow-y: auto;
+    background:#fff; border-radius:var(--radius); padding:32px 28px;
+    max-width:520px; width:90%; box-shadow:var(--shadow-lg);
+    position:relative; max-height:80vh; overflow-y:auto;
   }
-  .modal-box h3 { font-size: 1.1rem; font-weight: 900; margin-bottom: 14px; color: var(--primary); }
-  .modal-box .ai-content { font-size: 0.88rem; line-height: 1.8; color: var(--text); }
-  .modal-box .ai-content ul { padding-left: 18px; }
-  .modal-box .ai-content li { margin-bottom: 6px; }
-  .modal-close { position: absolute; top: 14px; right: 18px; font-size: 1.4rem; cursor: pointer; color: var(--text-sub); background: none; border: none; }
-  .modal-close:hover { color: var(--primary); }
-
-  /* tooltip */
-  [data-tooltip] { position: relative; }
-  [data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
-    background: #333; color: #fff; padding: 5px 10px; border-radius: 6px;
-    font-size: 0.75rem; white-space: nowrap; z-index: 200; pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  .modal-close {
+    position:absolute; top:14px; right:16px; background:none; border:none;
+    font-size:1.4rem; cursor:pointer; color:var(--text-muted);
   }
+  .modal-close:hover { color:var(--primary); }
+  .modal-title { font-size:1.15rem; font-weight:900; margin:0 0 16px; color:var(--primary); }
+  .modal-body { font-size:0.9rem; line-height:1.7; color:var(--text); }
+  .modal-body ul { padding-left:18px; margin:8px 0; }
+  .modal-body li { margin-bottom:6px; }
+  .modal-body .highlight { background:#fef2f2; border-left:3px solid var(--primary); padding:8px 12px; border-radius:4px; margin:10px 0; }
 
-  /* empty */
-  .empty-msg { text-align: center; padding: 40px; color: var(--text-sub); font-size: 1rem; }
+  /* summary stats */
+  .summary-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; margin-bottom:20px;
+  }
+  .summary-card {
+    background:var(--card-bg); border-radius:var(--radius-sm); padding:14px 16px;
+    box-shadow:var(--shadow); text-align:center;
+  }
+  .summary-card .s-val { font-size:1.6rem; font-weight:900; color:var(--primary); }
+  .summary-card .s-lbl { font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px; }
 
   /* responsive */
-  @media (max-width: 768px) {
-    .dashboard-header h1 { font-size: 26px; }
-    .top-cards-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-    .tab-btn { padding: 10px 12px; font-size: 0.8rem; }
-    .tabs-wrapper { top: 90px; }
+  @media(max-width:768px) {
+    .dashboard-header h1 { font-size:26px; }
+    .top-cards-grid { grid-template-columns:repeat(2,1fr); }
+    .tab-btn { padding:8px 12px; font-size:0.82rem; }
+    .tab-content { padding:12px; }
+    thead th, tbody td { padding:9px 10px; font-size:0.8rem; }
   }
-  @media (max-width: 480px) {
-    .dashboard-header h1 { font-size: 20px; }
-    .top-cards-grid { grid-template-columns: 1fr 1fr; }
+  @media(max-width:480px) {
+    .top-cards-grid { grid-template-columns:1fr 1fr; }
+    .dashboard-header h1 { font-size:20px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Security -->
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if (e.keyCode === 123 ||
+      (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+      (e.ctrlKey && e.keyCode === 85) ||
+      (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+      (e.ctrlKey && e.keyCode === 83)) {
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+
 <!-- HEADER -->
-<header class="dashboard-header">
+<div class="dashboard-header">
   <h1>🏆 삼다컨테스트 레벨업 실적 대시보드</h1>
-  <div class="date-label">📅 기준일: 2026년 04월 21일</div>
-</header>
+  <div class="date-label" id="headerDate">기준일: 2026-04-22</div>
+  <div class="header-deco"></div>
+</div>
 
 <!-- TOP CARDS -->
-<section class="top-cards-section">
-  <h2>🥇 대리점별 최우수 매장</h2>
+<div class="top-cards-section">
+  <h2>🥇 대리점별 TOP 매장</h2>
   <div class="top-cards-grid" id="topCardsGrid"></div>
-</section>
+</div>
 
 <!-- TABS -->
 <div class="tabs-wrapper">
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('levelY')" id="tab-levelY">레벨업 대상 Y <span class="tab-count" id="cnt-levelY">0</span></button>
-    <button class="tab-btn" onclick="switchTab('levelN')" id="tab-levelN">레벨업 대상 N <span class="tab-count" id="cnt-levelN">0</span></button>
-    <button class="tab-btn" onclick="switchTab('grade1')" id="tab-grade1">1등급 <span class="tab-count" id="cnt-grade1">0</span></button>
-    <button class="tab-btn" onclick="switchTab('grade2')" id="tab-grade2">2등급 <span class="tab-count" id="cnt-grade2">0</span></button>
-    <button class="tab-btn" onclick="switchTab('grade3')" id="tab-grade3">3등급 <span class="tab-count" id="cnt-grade3">0</span></button>
-    <button class="tab-btn" onclick="switchTab('all')" id="tab-all">종합현황 <span class="tab-count" id="cnt-all">0</span></button>
+    <button class="tab-btn active" onclick="switchTab('levelup-y')">🔼 레벨업 대상 Y</button>
+    <button class="tab-btn" onclick="switchTab('levelup-n')">🔽 레벨업 대상 N</button>
+    <button class="tab-btn" onclick="switchTab('grade1')">🥇 1등급</button>
+    <button class="tab-btn" onclick="switchTab('grade2')">🥈 2등급</button>
+    <button class="tab-btn" onclick="switchTab('grade3')">🥉 3등급</button>
+    <button class="tab-btn" onclick="switchTab('all')">📋 종합현황</button>
   </div>
 </div>
 
-<!-- TABLE -->
-<section class="table-section">
-  <div class="table-wrap">
-    <table id="mainTable">
-      <thead>
-        <tr>
-          <th onclick="sortTable('storeName')">매장 ↕</th>
-          <th onclick="sortTable('score')">당월 종합점수 ↕</th>
-          <th onclick="sortTable('grade')">당월 예상 등급 ↕</th>
-          <th>AI 코멘트</th>
-          <th onclick="sortTable('hs')">H/S판매<br>(MNP 1.2배)</th>
-          <th onclick="sortTable('wire')">유선</th>
-          <th onclick="sortTable('visit')">내방고객<br>(타사단골 가점)</th>
-          <th onclick="sortTable('nps')">NPS</th>
-          <th onclick="sortTable('penalty')">고객정보보호<br>위반(감점)</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-</section>
+<!-- TAB CONTENTS -->
+<div id="tab-levelup-y" class="tab-content active"></div>
+<div id="tab-levelup-n" class="tab-content"></div>
+<div id="tab-grade1" class="tab-content"></div>
+<div id="tab-grade2" class="tab-content"></div>
+<div id="tab-grade3" class="tab-content"></div>
+<div id="tab-all" class="tab-content"></div>
 
-<!-- AI MODAL -->
+<!-- AI Modal -->
 <div class="modal-overlay" id="aiModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3 id="modalTitle">🤖 AI 코멘트</h3>
-    <div class="ai-content" id="modalContent"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-//  RAW DATA (2026-04-21)
-// ══════════════════════════════════════════════
+// ============================================================
+// DATA
+// ============================================================
 const RAW_DATA = [
-  {agency:"서귀포",store:"서귀포 본점",code:"D931020000",recent3Score:101.17,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:124,mnp:7,wire_raw:9,visit_raw:689,rival:4,nps_raw:91.30,violation:0,hs:40.0,wire:8.833,visit:31.453,nps:18.261,penalty:0,score:98.547},
-  {agency:"서귀포",store:"서귀포 녹원점",code:"D931020011",recent3Score:60.60,recent3Grade:2,expectedGrade:2,levelUp:"Y",hs_raw:22,mnp:4,wire_raw:0,visit_raw:223,rival:7,nps_raw:100.0,violation:0,hs:20.543,wire:3.902,visit:20.615,nps:20.0,penalty:0,score:65.060},
-  {agency:"제주광양",store:"제주광양 중앙로 본점",code:"D931040000",recent3Score:96.78,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:69,mnp:19,wire_raw:21,visit_raw:296,rival:10,nps_raw:84.375,violation:0,hs:40.0,wire:10.0,visit:26.251,nps:16.875,penalty:0,score:93.126},
-  {agency:"제주광양",store:"제주광양 터미널점",code:"D931040009",recent3Score:91.10,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:38,mnp:8,wire_raw:1,visit_raw:410,rival:10,nps_raw:100.0,violation:0,hs:29.514,wire:4.449,visit:32.108,nps:20.0,penalty:0,score:86.072},
-  {agency:"제주광양",store:"제주광양 연동문화점",code:"D931040033",recent3Score:87.92,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:37,mnp:6,wire_raw:9,visit_raw:312,rival:11,nps_raw:100.0,violation:0,hs:28.766,wire:8.833,visit:27.524,nps:20.0,penalty:0,score:85.124},
-  {agency:"제주광양",store:"제주광양 아라점",code:"D931040039",recent3Score:57.34,recent3Grade:3,expectedGrade:3,levelUp:"Y",hs_raw:9,mnp:1,wire_raw:0,visit_raw:132,rival:2,nps_raw:80.0,violation:0,hs:13.281,wire:3.902,visit:13.452,nps:16.0,penalty:0,score:46.635},
-  {agency:"제주광양",store:"제주광양 삼화점",code:"D931040042",recent3Score:62.08,recent3Grade:2,expectedGrade:3,levelUp:"Y",hs_raw:12,mnp:3,wire_raw:0,visit_raw:257,rival:9,nps_raw:85.714,violation:0,hs:15.097,wire:3.902,visit:23.306,nps:17.143,penalty:0,score:59.447},
-  {agency:"제주광양",store:"제주광양 대학로점",code:"D931040043",recent3Score:61.58,recent3Grade:2,expectedGrade:3,levelUp:"Y",hs_raw:8,mnp:1,wire_raw:0,visit_raw:207,rival:8,nps_raw:71.429,violation:0,hs:12.747,wire:3.902,visit:19.561,nps:14.286,penalty:0,score:50.495},
-  {agency:"제주광양",store:"제주광양 서부점",code:"D931040044",recent3Score:61.11,recent3Grade:2,expectedGrade:3,levelUp:"Y",hs_raw:14,mnp:1,wire_raw:0,visit_raw:228,rival:5,nps_raw:71.429,violation:0,hs:15.951,wire:3.902,visit:20.761,nps:14.286,penalty:0,score:54.899},
-  {agency:"제주굿모닝",store:"제주굿모닝 해피점",code:"D931140002",recent3Score:101.00,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:117,mnp:14,wire_raw:17,visit_raw:755,rival:10,nps_raw:86.275,violation:0,hs:40.0,wire:10.0,visit:32.108,nps:17.255,penalty:0,score:99.363},
-  {agency:"제주굿모닝",store:"제주굿모닝 서문점",code:"D931140004",recent3Score:50.52,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:13,mnp:0,wire_raw:0,visit_raw:196,rival:7,nps_raw:100.0,violation:0,hs:15.310,wire:3.902,visit:18.652,nps:20.0,penalty:0,score:57.864},
-  {agency:"제주굿모닝",store:"제주굿모닝 노형뉴타운점",code:"D931140005",recent3Score:64.22,recent3Grade:2,expectedGrade:3,levelUp:"N",hs_raw:17,mnp:2,wire_raw:0,visit_raw:226,rival:7,nps_raw:57.143,violation:0,hs:17.660,wire:3.902,visit:20.833,nps:11.429,penalty:0,score:53.823},
-  {agency:"제주굿모닝",store:"제주굿모닝 성산점",code:"D931140006",recent3Score:55.79,recent3Grade:3,expectedGrade:3,levelUp:"Y",hs_raw:18,mnp:2,wire_raw:0,visit_raw:111,rival:6,nps_raw:100.0,violation:0,hs:18.194,wire:3.902,visit:12.361,nps:20.0,penalty:0,score:54.456},
-  {agency:"제주굿모닝",store:"제주굿모닝 이도점",code:"D931140007",recent3Score:98.59,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:62,mnp:8,wire_raw:12,visit_raw:398,rival:3,nps_raw:90.0,violation:0,hs:40.0,wire:10.0,visit:31.344,nps:18.0,penalty:0,score:99.344},
-  {agency:"제주굿모닝",store:"제주굿모닝 연동점",code:"D931140012",recent3Score:61.05,recent3Grade:2,expectedGrade:3,levelUp:"Y",hs_raw:15,mnp:2,wire_raw:1,visit_raw:185,rival:7,nps_raw:66.667,violation:0,hs:16.592,wire:4.449,visit:17.852,nps:13.333,penalty:0,score:52.226},
-  {agency:"제주굿모닝",store:"제주굿모닝 동우점",code:"D931140013",recent3Score:76.42,recent3Grade:2,expectedGrade:2,levelUp:"N",hs_raw:22,mnp:5,wire_raw:0,visit_raw:335,rival:6,nps_raw:87.5,violation:0,hs:20.650,wire:3.902,visit:28.651,nps:17.5,penalty:0,score:70.703},
-  {agency:"JS",store:"JS 인제점",code:"D931160002",recent3Score:92.57,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:44,mnp:10,wire_raw:17,visit_raw:315,rival:15,nps_raw:90.476,violation:0,hs:32.931,wire:10.0,visit:28.179,nps:18.095,penalty:0,score:89.205},
-  {agency:"제주중앙",store:"제주중앙 본점",code:"D931510000",recent3Score:63.66,recent3Grade:2,expectedGrade:2,levelUp:"N",hs_raw:28,mnp:6,wire_raw:7,visit_raw:286,rival:7,nps_raw:93.333,violation:0,hs:23.961,wire:7.737,visit:25.197,nps:18.667,penalty:0,score:75.561},
-  {agency:"제주중앙",store:"제주중앙 연동점",code:"D931510001",recent3Score:56.94,recent3Grade:3,expectedGrade:2,levelUp:"Y",hs_raw:24,mnp:3,wire_raw:2,visit_raw:160,rival:5,nps_raw:100.0,violation:0,hs:21.504,wire:4.997,visit:15.815,nps:20.0,penalty:0,score:62.317},
-  {agency:"제주",store:"제주 본점",code:"D931650016",recent3Score:50.24,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:15,mnp:1,wire_raw:0,visit_raw:85,rival:1,nps_raw:33.333,violation:0,hs:16.485,wire:3.902,visit:9.925,nps:6.667,penalty:0,score:36.978},
-  {agency:"제주E&T",store:"제주E&T 시청점",code:"D931780002",recent3Score:80.60,recent3Grade:1,expectedGrade:2,levelUp:"N",hs_raw:40,mnp:4,wire_raw:0,visit_raw:256,rival:5,nps_raw:100.0,violation:0,hs:30.155,wire:3.902,visit:22.797,nps:20.0,penalty:0,score:76.853},
-  {agency:"제주E&T",store:"제주E&T 도남점",code:"D931780005",recent3Score:51.80,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:15,mnp:1,wire_raw:7,visit_raw:158,rival:0,nps_raw:90.909,violation:0,hs:16.485,wire:7.737,visit:15.124,nps:18.182,penalty:0,score:57.528},
-  {agency:"제주E&T",store:"제주E&T 연북로점",code:"D931780010",recent3Score:57.86,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:14,mnp:3,wire_raw:0,visit_raw:123,rival:0,nps_raw:100.0,violation:0,hs:16.165,wire:3.902,visit:12.579,nps:20.0,penalty:0,score:52.645},
-  {agency:"제주E&T",store:"제주E&T 삼화점",code:"D931780012",recent3Score:68.40,recent3Grade:2,expectedGrade:3,levelUp:"N",hs_raw:10,mnp:2,wire_raw:0,visit_raw:199,rival:3,nps_raw:50.0,violation:0,hs:13.922,wire:3.902,visit:18.433,nps:10.0,penalty:0,score:46.257},
-  {agency:"제주E&T",store:"제주E&T 노형점",code:"D931780013",recent3Score:44.99,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:6,mnp:0,wire_raw:0,visit_raw:70,rival:1,nps_raw:50.0,violation:0,hs:11.573,wire:3.902,visit:8.834,nps:10.0,penalty:0,score:34.308},
-  {agency:"제주정다운",store:"제주정다운 본점",code:"D931790000",recent3Score:49.37,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:9,mnp:0,wire_raw:2,visit_raw:85,rival:0,nps_raw:100.0,violation:0,hs:13.175,wire:4.997,visit:9.815,nps:20.0,penalty:0,score:47.987},
-  {agency:"제주정다운",store:"제주정다운 외도점",code:"D931790003",recent3Score:49.08,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:12,mnp:1,wire_raw:0,visit_raw:79,rival:0,nps_raw:100.0,violation:0,hs:14.883,wire:3.902,visit:9.379,nps:20.0,penalty:0,score:48.164},
-  {agency:"제주정다운",store:"제주정다운 서사라점",code:"D931790005",recent3Score:56.67,recent3Grade:3,expectedGrade:3,levelUp:"Y",hs_raw:14,mnp:3,wire_raw:6,visit_raw:142,rival:10,nps_raw:100.0,violation:0,hs:16.165,wire:7.189,visit:15.052,nps:20.0,penalty:0,score:58.406},
-  {agency:"앤유",store:"앤유 본점",code:"D931800000",recent3Score:61.94,recent3Grade:2,expectedGrade:2,levelUp:"Y",hs_raw:25,mnp:5,wire_raw:0,visit_raw:196,rival:2,nps_raw:96.0,violation:0,hs:22.252,wire:3.902,visit:18.106,nps:19.2,penalty:0,score:63.460},
-  {agency:"앤유",store:"앤유 한림점",code:"D931800004",recent3Score:41.24,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:4,mnp:0,wire_raw:0,visit_raw:58,rival:0,nps_raw:85.714,violation:0,hs:10.505,wire:3.902,visit:7.852,nps:17.143,penalty:0,score:39.401},
-  {agency:"스마일",store:"스마일 남녕점",code:"D931820003",recent3Score:65.28,recent3Grade:2,expectedGrade:2,levelUp:"N",hs_raw:14,mnp:2,wire_raw:0,visit_raw:244,rival:16,nps_raw:100.0,violation:0,hs:16.058,wire:3.902,visit:23.125,nps:20.0,penalty:0,score:63.084},
-  {agency:"스마일",store:"스마일 동홍점",code:"D931820004",recent3Score:67.95,recent3Grade:2,expectedGrade:2,levelUp:"N",hs_raw:41,mnp:7,wire_raw:2,visit_raw:242,rival:4,nps_raw:88.235,violation:0,hs:31.009,wire:4.997,visit:21.670,nps:17.647,penalty:0,score:75.323},
-  {agency:"스마일",store:"스마일 대정점",code:"D931820008",recent3Score:47.06,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:19,mnp:2,wire_raw:0,visit_raw:85,rival:0,nps_raw:60.0,violation:0,hs:18.728,wire:3.902,visit:9.815,nps:12.0,penalty:0,score:44.445},
-  {agency:"스마일",store:"스마일 삼화점",code:"D931820009",recent3Score:76.97,recent3Grade:2,expectedGrade:2,levelUp:"N",hs_raw:26,mnp:2,wire_raw:2,visit_raw:300,rival:2,nps_raw:88.889,violation:0,hs:22.466,wire:4.997,visit:25.669,nps:17.778,penalty:0,score:70.910},
-  {agency:"스마일",store:"스마일 화북점",code:"D931820012",recent3Score:45.11,recent3Grade:3,expectedGrade:3,levelUp:"N",hs_raw:8,mnp:6,wire_raw:6,visit_raw:99,rival:1,nps_raw:75.0,violation:0,hs:13.281,wire:7.189,visit:10.943,nps:15.0,penalty:0,score:46.413},
-  {agency:"오름",store:"오름 본점",code:"D931830000",recent3Score:73.14,recent3Grade:2,expectedGrade:1,levelUp:"N",hs_raw:105,mnp:81,wire_raw:6,visit_raw:351,rival:17,nps_raw:100.0,violation:0,hs:40.0,wire:7.189,visit:31.015,nps:20.0,penalty:0,score:98.204},
-  {agency:"오름",store:"오름 아라점",code:"D931830004",recent3Score:99.88,recent3Grade:1,expectedGrade:1,levelUp:"N",hs_raw:40,mnp:10,wire_raw:12,visit_raw:355,rival:37,nps_raw:100.0,violation:0,hs:30.796,wire:10.0,visit:31.434,nps:20.0,penalty:0,score:92.230},
-  {agency:"오름",store:"오름 인제점",code:"D931830009",recent3Score:74.89,recent3Grade:2,expectedGrade:1,levelUp:"N",hs_raw:46,mnp:2,wire_raw:2,visit_raw:256,rival:9,nps_raw:100.0,violation:0,hs:33.145,wire:4.997,visit:23.233,nps:20.0,penalty:0,score:81.376},
-  {agency:"오름",store:"오름 한림점",code:"D931830010",recent3Score:54.12,recent3Grade:3,expectedGrade:3,levelUp:"Y",hs_raw:11,mnp:1,wire_raw:0,visit_raw:85,rival:4,nps_raw:87.5,violation:0,hs:14.349,wire:3.902,visit:10.252,nps:17.5,penalty:0,score:46.003}
+  {날짜:"2026-04-22",대리점명:"서귀포",매장코드:"D931020000",매장명:"서귀포 본점",최근3개월종합점수:101.17,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:130,MNP:7,유선:9,내방고객:727,타사단골:5,NPS:90.54,위반:0,HS가중:40.0,유선가중:8.538,내방가중:31.535,NPS가중:18.108,위반감점:0,종합점수:98.18},
+  {날짜:"2026-04-22",대리점명:"서귀포",매장코드:"D931020011",매장명:"서귀포 녹원점",최근3개월종합점수:60.60,최근3개월등급:2,당월예상등급:2,레벨업:"Y",HS판매:24,MNP:4,유선:0,내방고객:236,타사단골:7,NPS:88.89,위반:0,HS가중:21.080,유선가중:3.884,내방가중:20.684,NPS가중:17.778,위반감점:0,종합점수:63.43},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040000",매장명:"제주광양 중앙로 본점",최근3개월종합점수:96.78,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:69,MNP:19,유선:23,내방고객:312,타사단골:10,NPS:85.29,위반:0,HS가중:40.0,유선가중:10.0,내방가중:26.267,NPS가중:17.059,위반감점:0,종합점수:93.33},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040009",매장명:"제주광양 터미널점",최근3개월종합점수:91.10,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:39,MNP:8,유선:1,내방고객:427,타사단골:10,NPS:92.0,위반:0,HS가중:29.203,유선가중:4.402,내방가중:32.065,NPS가중:18.400,위반감점:0,종합점수:84.07},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040033",매장명:"제주광양 연동문화점",최근3개월종합점수:87.92,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:39,MNP:6,유선:9,내방고객:325,타사단골:12,NPS:100.0,위반:0,HS가중:28.998,유선가중:8.538,내방가중:27.379,NPS가중:20.0,위반감점:0,종합점수:84.92},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040039",매장명:"제주광양 아라점",최근3개월종합점수:57.34,최근3개월등급:3,당월예상등급:3,레벨업:"Y",HS판매:9,MNP:1,유선:0,내방고객:139,타사단골:2,NPS:80.0,위반:0,HS가중:13.060,유선가중:3.884,내방가중:13.434,NPS가중:16.0,위반감점:0,종합점수:46.38},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040042",매장명:"제주광양 삼화점",최근3개월종합점수:62.08,최근3개월등급:2,당월예상등급:2,레벨업:"Y",HS판매:16,MNP:6,유선:2,내방고객:269,타사단골:9,NPS:88.89,위반:0,HS가중:17.173,유선가중:4.919,내방가중:23.182,NPS가중:17.778,위반감점:0,종합점수:63.05},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040043",매장명:"제주광양 대학로점",최근3개월종합점수:61.58,최근3개월등급:2,당월예상등급:3,레벨업:"Y",HS판매:8,MNP:1,유선:0,내방고객:216,타사단골:8,NPS:66.67,위반:0,HS가중:12.546,유선가중:3.884,내방가중:19.404,NPS가중:13.333,위반감점:0,종합점수:49.17},
+  {날짜:"2026-04-22",대리점명:"제주광양",매장코드:"D931040044",매장명:"제주광양 서부점",최근3개월종합점수:61.11,최근3개월등급:2,당월예상등급:3,레벨업:"Y",HS판매:17,MNP:2,유선:0,내방고객:235,타사단골:5,NPS:71.43,위반:0,HS가중:17.276,유선가중:3.884,내방가중:20.403,NPS가중:14.286,위반감점:0,종합점수:55.85},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140002",매장명:"제주굿모닝 해피점",최근3개월종합점수:101.00,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:122,MNP:15,유선:22,내방고객:805,타사단골:10,NPS:86.79,위반:0,HS가중:40.0,유선가중:10.0,내방가중:32.065,NPS가중:17.358,위반감점:0,종합점수:99.42},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140004",매장명:"제주굿모닝 서문점",최근3개월종합점수:50.52,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:13,MNP:0,유선:0,내방고객:202,타사단골:8,NPS:100.0,위반:0,HS가중:15.014,유선가중:3.884,내방가중:18.435,NPS가중:20.0,위반감점:0,종합점수:57.33},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140005",매장명:"제주굿모닝 노형뉴타운점",최근3개월종합점수:64.22,최근3개월등급:2,당월예상등급:3,레벨업:"N",HS판매:17,MNP:2,유선:0,내방고객:232,타사단골:7,NPS:62.5,위반:0,HS가중:17.276,유선가중:3.884,내방가중:20.407,NPS가중:12.5,위반감점:0,종합점수:54.07},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140006",매장명:"제주굿모닝 성산점",최근3개월종합점수:55.79,최근3개월등급:3,당월예상등급:3,레벨업:"Y",HS판매:19,MNP:2,유선:0,내방고객:122,타사단골:6,NPS:100.0,위반:0,HS가중:18.304,유선가중:3.884,내방가중:12.681,NPS가중:20.0,위반감점:0,종합점수:54.87},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140007",매장명:"제주굿모닝 이도점",최근3개월종합점수:98.59,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:65,MNP:9,유선:12,내방고객:431,타사단골:3,NPS:86.36,위반:0,HS가중:40.0,유선가중:10.0,내방가중:31.323,NPS가중:17.273,위반감점:0,종합점수:98.60},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140012",매장명:"제주굿모닝 연동점",최근3개월종합점수:61.05,최근3개월등급:2,당월예상등급:3,레벨업:"Y",HS판매:16,MNP:2,유선:1,내방고객:196,타사단골:8,NPS:66.67,위반:0,HS가중:16.762,유선가중:4.402,내방가중:18.019,NPS가중:13.333,위반감점:0,종합점수:52.52},
+  {날짜:"2026-04-22",대리점명:"제주굿모닝",매장코드:"D931140013",매장명:"제주굿모닝 동우점",최근3개월종합점수:76.42,최근3개월등급:2,당월예상등급:2,레벨업:"N",HS판매:24,MNP:5,유선:0,내방고객:350,타사단골:10,NPS:87.5,위반:0,HS가중:21.183,유선가중:3.884,내방가중:28.899,NPS가중:17.5,위반감점:0,종합점수:71.47},
+  {날짜:"2026-04-22",대리점명:"JS",매장코드:"D931160002",매장명:"JS 인제점",최근3개월종합점수:92.57,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:46,MNP:10,유선:17,내방고객:330,타사단골:16,NPS:90.48,위반:0,HS가중:33.008,유선가중:10.0,내방가중:28.150,NPS가중:18.095,위반감점:0,종합점수:89.25},
+  {날짜:"2026-04-22",대리점명:"제주중앙",매장코드:"D931510000",매장명:"제주중앙 본점",최근3개월종합점수:63.66,최근3개월등급:2,당월예상등급:2,레벨업:"N",HS판매:31,MNP:8,유선:7,내방고객:293,타사단골:7,NPS:93.75,위반:0,HS가중:25.090,유선가중:7.504,내방가중:24.633,NPS가중:18.75,위반감점:0,종합점수:75.98},
+  {날짜:"2026-04-22",대리점명:"제주중앙",매장코드:"D931510001",매장명:"제주중앙 연동점",최근3개월종합점수:56.94,최근3개월등급:3,당월예상등급:2,레벨업:"Y",HS판매:26,MNP:4,유선:2,내방고객:163,타사단골:5,NPS:100.0,위반:0,HS가중:22.109,유선가중:4.919,내방가중:15.415,NPS가중:20.0,위반감점:0,종합점수:62.44},
+  {날짜:"2026-04-22",대리점명:"제주",매장코드:"D931650016",매장명:"제주 본점",최근3개월종합점수:50.24,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:15,MNP:1,유선:0,내방고객:96,타사단골:1,NPS:60.0,위반:0,HS가중:16.145,유선가중:3.884,내방가중:10.349,NPS가중:12.0,위반감점:0,종합점수:42.38},
+  {날짜:"2026-04-22",대리점명:"제주E&T",매장코드:"D931780002",매장명:"제주E&T 시청점",최근3개월종합점수:80.60,최근3개월등급:1,당월예상등급:2,레벨업:"N",HS판매:42,MNP:4,유선:0,내방고객:258,타사단골:5,NPS:100.0,위반:0,HS가중:30.335,유선가중:3.884,내방가중:21.996,NPS가중:20.0,위반감점:0,종합점수:76.22},
+  {날짜:"2026-04-22",대리점명:"제주E&T",매장코드:"D931780005",매장명:"제주E&T 도남점",최근3개월종합점수:51.80,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:15,MNP:1,유선:7,내방고객:166,타사단골:0,NPS:91.67,위반:0,HS가중:16.145,유선가중:7.504,내방가중:15.093,NPS가중:18.333,위반감점:0,종합점수:57.07},
+  {날짜:"2026-04-22",대리점명:"제주E&T",매장코드:"D931780010",매장명:"제주E&T 연북로점",최근3개월종합점수:57.86,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:14,MNP:3,유선:0,내방고객:129,타사단골:0,NPS:100.0,위반:0,HS가중:15.836,유선가중:3.884,내방가중:12.530,NPS가중:20.0,위반감점:0,종합점수:52.25},
+  {날짜:"2026-04-22",대리점명:"제주E&T",매장코드:"D931780012",매장명:"제주E&T 삼화점",최근3개월종합점수:68.40,최근3개월등급:2,당월예상등급:3,레벨업:"N",HS판매:11,MNP:2,유선:0,내방고객:208,타사단골:3,NPS:60.0,위반:0,HS가중:14.191,유선가중:3.884,내방가중:18.320,NPS가중:12.0,위반감점:0,종합점수:48.40},
+  {날짜:"2026-04-22",대리점명:"제주E&T",매장코드:"D931780013",매장명:"제주E&T 노형점",최근3개월종합점수:44.99,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:7,MNP:0,유선:0,내방고객:74,타사단골:1,NPS:60.0,위반:0,HS가중:11.929,유선가중:3.884,내방가중:8.825,NPS가중:12.0,위반감점:0,종합점수:36.64},
+  {날짜:"2026-04-22",대리점명:"제주정다운",매장코드:"D931790000",매장명:"제주정다운 본점",최근3개월종합점수:49.37,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:10,MNP:0,유선:2,내방고객:90,타사단골:0,NPS:100.0,위반:0,HS가중:13.471,유선가중:4.919,내방가중:9.828,NPS가중:20.0,위반감점:0,종합점수:48.22},
+  {날짜:"2026-04-22",대리점명:"제주정다운",매장코드:"D931790003",매장명:"제주정다운 외도점",최근3개월종합점수:49.08,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:14,MNP:1,유선:0,내방고객:84,타사단골:0,NPS:100.0,위반:0,HS가중:15.630,유선가중:3.884,내방가중:9.412,NPS가중:20.0,위반감점:0,종합점수:48.93},
+  {날짜:"2026-04-22",대리점명:"제주정다운",매장코드:"D931790005",매장명:"제주정다운 서사라점",최근3개월종합점수:56.67,최근3개월등급:3,당월예상등급:3,레벨업:"Y",HS판매:14,MNP:3,유선:6,내방고객:155,타사단골:10,NPS:100.0,위반:0,HS가중:15.836,유선가중:6.987,내방가중:15.391,NPS가중:20.0,위반감점:0,종합점수:58.21},
+  {날짜:"2026-04-22",대리점명:"앤유",매장코드:"D931800000",매장명:"앤유 본점",최근3개월종합점수:61.94,최근3개월등급:2,당월예상등급:2,레벨업:"Y",HS판매:26,MNP:5,유선:0,내방고객:201,타사단골:2,NPS:96.0,위반:0,HS가중:22.211,유선가중:3.884,내방가중:17.729,NPS가중:19.200,위반감점:0,종합점수:63.03},
+  {날짜:"2026-04-22",대리점명:"앤유",매장코드:"D931800004",매장명:"앤유 한림점",최근3개월종합점수:41.24,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:4,MNP:0,유선:0,내방고객:63,타사단골:0,NPS:85.71,위반:0,HS가중:10.386,유선가중:3.884,내방가중:7.957,NPS가중:17.143,위반감점:0,종합점수:39.37},
+  {날짜:"2026-04-22",대리점명:"스마일",매장코드:"D931820003",매장명:"스마일 남녕점",최근3개월종합점수:65.28,최근3개월등급:2,당월예상등급:2,레벨업:"N",HS판매:14,MNP:2,유선:0,내방고객:255,타사단골:16,NPS:100.0,위반:0,HS가중:15.733,유선가중:3.884,내방가중:22.954,NPS가중:20.0,위반감점:0,종합점수:62.57},
+  {날짜:"2026-04-22",대리점명:"스마일",매장코드:"D931820004",매장명:"스마일 동홍점",최근3개월종합점수:67.95,최근3개월등급:2,당월예상등급:2,레벨업:"N",HS판매:42,MNP:7,유선:2,내방고객:252,타사단골:4,NPS:88.24,위반:0,HS가중:30.643,유선가중:4.919,내방가중:21.474,NPS가중:17.647,위반감점:0,종합점수:74.68},
+  {날짜:"2026-04-22",대리점명:"스마일",매장코드:"D931820008",매장명:"스마일 대정점",최근3개월종합점수:47.06,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:21,MNP:2,유선:0,내방고객:95,타사단골:0,NPS:66.67,위반:0,HS가중:19.332,유선가중:3.884,내방가중:10.174,NPS가중:13.333,위반감점:0,종합점수:46.72},
+  {날짜:"2026-04-22",대리점명:"스마일",매장코드:"D931820009",매장명:"스마일 삼화점",최근3개월종합점수:76.97,최근3개월등급:2,당월예상등급:2,레벨업:"N",HS판매:27,MNP:3,유선:2,내방고객:315,타사단골:2,NPS:90.0,위반:0,HS가중:22.520,유선가중:4.919,내방가중:25.627,NPS가중:18.0,위반감점:0,종합점수:71.07},
+  {날짜:"2026-04-22",대리점명:"스마일",매장코드:"D931820012",매장명:"스마일 화북점",최근3개월종합점수:45.11,최근3개월등급:3,당월예상등급:3,레벨업:"N",HS판매:8,MNP:6,유선:6,내방고객:103,타사단골:1,NPS:75.0,위반:0,HS가중:13.060,유선가중:6.987,내방가중:10.834,NPS가중:15.0,위반감점:0,종합점수:45.88},
+  {날짜:"2026-04-22",대리점명:"오름",매장코드:"D931830000",매장명:"오름 본점",최근3개월종합점수:73.14,최근3개월등급:2,당월예상등급:1,레벨업:"N",HS판매:106,MNP:82,유선:6,내방고객:351,타사단골:17,NPS:100.0,위반:0,HS가중:40.0,유선가중:6.987,내방가중:29.711,NPS가중:20.0,위반감점:0,종합점수:96.70},
+  {날짜:"2026-04-22",대리점명:"오름",매장코드:"D931830004",매장명:"오름 아라점",최근3개월종합점수:99.88,최근3개월등급:1,당월예상등급:1,레벨업:"N",HS판매:40,MNP:10,유선:12,내방고객:363,타사단골:37,NPS:100.0,위반:0,HS가중:29.923,유선가중:10.0,내방가중:30.735,NPS가중:20.0,위반감점:0,종합점수:90.66},
+  {날짜:"2026-04-22",대리점명:"오름",매장코드:"D931830009",매장명:"오름 인제점",최근3개월종합점수:74.89,최근3개월등급:2,당월예상등급:1,레벨업:"N",HS판매:48,MNP:2,유선:2,내방고객:267,타사단골:10,NPS:100.0,위반:0,HS가중:33.214,유선가중:4.919,내방가중:23.149,NPS가중:20.0,위반감점:0,종합점수:81.28},
+  {날짜:"2026-04-22",대리점명:"오름",매장코드:"D931830010",매장명:"오름 한림점",최근3개월종합점수:54.12,최근3개월등급:3,당월예상등급:3,레벨업:"Y",HS판매:11,MNP:1,유선:0,내방고객:92,타사단골:4,NPS:87.5,위반:0,HS가중:14.088,유선가중:3.884,내방가중:10.390,NPS가중:17.5,위반감점:0,종합점수:45.86}
 ];
 
-// ══════════════════════════════════════════════
-//  대리점 색상 맵
-// ══════════════════════════════════════════════
+// ============================================================
+// AGENCY COLORS
+// ============================================================
 const AGENCY_COLORS = {
-  "JS":         { border:"#1565C0", bg:"#E3F2FD", text:"#1565C0" },
-  "서귀포":     { border:"#00838F", bg:"#E0F7FA", text:"#00838F" },
-  "스마일":     { border:"#558B2F", bg:"#F1F8E9", text:"#558B2F" },
-  "앤유":       { border:"#AD1457", bg:"#FCE4EC", text:"#AD1457" },
-  "오름":       { border:"#4527A0", bg:"#EDE7F6", text:"#4527A0" },
-  "제주":       { border:"#E65100", bg:"#FFF3E0", text:"#E65100" },
-  "제주E&T":    { border:"#00695C", bg:"#E0F2F1", text:"#00695C" },
-  "제주광양":   { border:"#1976D2", bg:"#E3F2FD", text:"#1976D2" },
-  "제주굿모닝": { border:"#F57F17", bg:"#FFFDE7", text:"#F57F17" },
-  "제주정다운": { border:"#6A1B9A", bg:"#F3E5F5", text:"#6A1B9A" },
-  "제주중앙":   { border:"#37474F", bg:"#ECEFF1", text:"#37474F" }
+  "서귀포":    {accent:"#E60012", bg:"#fff0f0", text:"#b0000d"},
+  "제주광양":  {accent:"#1d4ed8", bg:"#eff6ff", text:"#1e40af"},
+  "제주굿모닝":{accent:"#7c3aed", bg:"#f5f3ff", text:"#6d28d9"},
+  "JS":        {accent:"#0891b2", bg:"#ecfeff", text:"#0e7490"},
+  "제주중앙":  {accent:"#059669", bg:"#ecfdf5", text:"#047857"},
+  "제주":      {accent:"#d97706", bg:"#fffbeb", text:"#b45309"},
+  "제주E&T":   {accent:"#db2777", bg:"#fdf2f8", text:"#be185d"},
+  "제주정다운":{accent:"#ea580c", bg:"#fff7ed", text:"#c2410c"},
+  "앤유":      {accent:"#4f46e5", bg:"#eef2ff", text:"#4338ca"},
+  "스마일":    {accent:"#16a34a", bg:"#f0fdf4", text:"#15803d"},
+  "오름":      {accent:"#ca8a04", bg:"#fefce8", text:"#a16207"}
 };
 
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-let currentTab = 'levelY';
-let sortKey = 'score';
-let sortAsc = false;
-
-// ══════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════
-function init() {
-  renderTopCards();
-  updateCounts();
-  renderTable();
+// ============================================================
+// HELPERS
+// ============================================================
+function gradeLbl(g) {
+  if(g===1) return `<span class="grade-lbl g1">🥇 1등급</span>`;
+  if(g===2) return `<span class="grade-lbl g2">🥈 2등급</span>`;
+  return `<span class="grade-lbl g3">🥉 3등급</span>`;
 }
+function gradeArrow(cur, prev) {
+  if(cur < prev) return `<span class="arrow-up">▲</span>`;
+  if(cur > prev) return `<span class="arrow-down">▼</span>`;
+  return `<span class="arrow-same">─</span>`;
+}
+function fmt(v, d=2) { return typeof v==='number' ? v.toFixed(d) : v; }
 
-// ══════════════════════════════════════════════
-//  TOP CARDS
-// ══════════════════════════════════════════════
-function renderTopCards() {
+// ============================================================
+// TOP CARDS
+// ============================================================
+function buildTopCards() {
   const grid = document.getElementById('topCardsGrid');
-  const agencies = [...new Set(RAW_DATA.map(d => d.agency))].sort();
+  const agencies = [...new Set(RAW_DATA.map(d=>d.대리점명))];
   let html = '';
-  agencies.forEach(agency => {
-    const stores = RAW_DATA.filter(d => d.agency === agency);
-    // 1등급 우선, 없으면 2등급
-    let best = stores.filter(d => d.expectedGrade === 1).sort((a,b) => b.score - a.score)[0];
-    if (!best) best = stores.filter(d => d.expectedGrade === 2).sort((a,b) => b.score - a.score)[0];
-    if (!best) best = stores.sort((a,b) => b.score - a.score)[0];
-    const col = AGENCY_COLORS[agency] || { border:"#9E9E9E", bg:"#F5F5F5", text:"#9E9E9E" };
-    const gradeClass = `grade-${best.expectedGrade}`;
-    const gradeLabel = `${best.expectedGrade}등급`;
-    const levelBadge = best.levelUp === 'Y' ? '<span class="level-y">레벨업 Y</span>' : '';
+  agencies.forEach(ag => {
+    const stores = RAW_DATA.filter(d=>d.대리점명===ag).sort((a,b)=>a.당월예상등급-b.당월예상등급||b.종합점수-a.종합점수);
+    // find best: prefer grade 1, else grade 2, else grade 3
+    let top = stores.find(s=>s.당월예상등급===1) || stores.find(s=>s.당월예상등급===2) || stores[0];
+    const col = AGENCY_COLORS[ag] || {accent:"#E60012",bg:"#fff0f0",text:"#b0000d"};
+    const isTop1 = top.당월예상등급===1;
     html += `
-      <div class="top-card" style="border-left-color:${col.border};background:${col.bg};"
-           data-tooltip="대리점: ${agency} | 최근3개월 종합: ${best.recent3Score.toFixed(2)} | 최근3개월 등급: ${best.recent3Grade}등급">
-        <div class="agency-name" style="color:${col.text};">${agency}</div>
-        <div class="store-name" style="color:${col.text};">${best.store} <span class="crown">👑</span></div>
-        <div class="score" style="color:${col.text};">당월 종합점수: <strong>${best.score.toFixed(2)}</strong></div>
-        <div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-          <span class="${gradeClass}">${gradeLabel}</span>
-          ${levelBadge}
-        </div>
-      </div>`;
+    <div class="top-card" style="--card-accent:${col.accent}; background:${col.bg};">
+      <div class="agency-name">${ag}</div>
+      <div class="crown">${isTop1?'👑':'🏅'}</div>
+      <div class="store-name" style="color:${col.text}">${top.매장명}</div>
+      <div class="score" style="color:${col.accent}">종합점수 <strong>${fmt(top.종합점수)}</strong></div>
+      <div style="margin-top:6px">${gradeLbl(top.당월예상등급)}</div>
+    </div>`;
   });
   grid.innerHTML = html;
 }
 
-// ══════════════════════════════════════════════
-//  COUNTS
-// ══════════════════════════════════════════════
-function updateCounts() {
-  document.getElementById('cnt-levelY').textContent = RAW_DATA.filter(d=>d.levelUp==='Y').length;
-  document.getElementById('cnt-levelN').textContent = RAW_DATA.filter(d=>d.levelUp==='N').length;
-  document.getElementById('cnt-grade1').textContent = RAW_DATA.filter(d=>d.expectedGrade===1).length;
-  document.getElementById('cnt-grade2').textContent = RAW_DATA.filter(d=>d.expectedGrade===2).length;
-  document.getElementById('cnt-grade3').textContent = RAW_DATA.filter(d=>d.expectedGrade===3).length;
-  document.getElementById('cnt-all').textContent = RAW_DATA.length;
-}
+// ============================================================
+// TABLE BUILDER
+// ============================================================
+function buildTable(data, containerId) {
+  const sorted = [...data].sort((a,b)=>b.종합점수-a.종합점수);
+  const container = document.getElementById(containerId);
 
-// ══════════════════════════════════════════════
-//  TAB SWITCH
-// ══════════════════════════════════════════════
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  sortKey = 'score'; sortAsc = false;
-  renderTable();
-}
+  // summary
+  const cnt1 = data.filter(d=>d.당월예상등급===1).length;
+  const cnt2 = data.filter(d=>d.당월예상등급===2).length;
+  const cnt3 = data.filter(d=>d.당월예상등급===3).length;
+  const avgScore = data.reduce((s,d)=>s+d.종합점수,0)/data.length;
 
-// ══════════════════════════════════════════════
-//  FILTER DATA
-// ══════════════════════════════════════════════
-function getFilteredData() {
-  switch(currentTab) {
-    case 'levelY':  return RAW_DATA.filter(d => d.levelUp === 'Y');
-    case 'levelN':  return RAW_DATA.filter(d => d.levelUp === 'N');
-    case 'grade1':  return RAW_DATA.filter(d => d.expectedGrade === 1);
-    case 'grade2':  return RAW_DATA.filter(d => d.expectedGrade === 2);
-    case 'grade3':  return RAW_DATA.filter(d => d.expectedGrade === 3);
-    default:        return [...RAW_DATA];
-  }
-}
+  let html = `
+  <div class="summary-grid">
+    <div class="summary-card"><div class="s-val">${data.length}</div><div class="s-lbl">총 매장 수</div></div>
+    <div class="summary-card"><div class="s-val" style="color:var(--grade1)">${cnt1}</div><div class="s-lbl">1등급</div></div>
+    <div class="summary-card"><div class="s-val" style="color:var(--grade2)">${cnt2}</div><div class="s-lbl">2등급</div></div>
+    <div class="summary-card"><div class="s-val" style="color:var(--grade3)">${cnt3}</div><div class="s-lbl">3등급</div></div>
+    <div class="summary-card"><div class="s-val">${fmt(avgScore)}</div><div class="s-lbl">평균 종합점수</div></div>
+  </div>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>순위</th>
+        <th>매장</th>
+        <th>당월 종합점수</th>
+        <th>당월 예상 등급</th>
+        <th>AI 코멘트</th>
+        <th>H/S판매<br>(MNP 1.2배)</th>
+        <th>유선</th>
+        <th>내방고객<br>(타사단골 가점)</th>
+        <th>NPS</th>
+        <th>고객정보보호<br>위반(감점)</th>
+      </tr>
+    </thead>
+    <tbody>`;
 
-// ══════════════════════════════════════════════
-//  SORT
-// ══════════════════════════════════════════════
-function sortTable(key) {
-  if (sortKey === key) sortAsc = !sortAsc;
-  else { sortKey = key; sortAsc = false; }
-  renderTable();
-}
+  sorted.forEach((row, idx) => {
+    const rank = idx+1;
+    const rankClass = rank<=3 ? `rank-${rank}` : '';
+    let rankBadge = '';
+    if(rank===1) rankBadge = `<span class="rank-badge r1">1</span>`;
+    else if(rank===2) rankBadge = `<span class="rank-badge r2">2</span>`;
+    else if(rank===3) rankBadge = `<span class="rank-badge r3">3</span>`;
+    else rankBadge = `<span style="color:var(--text-muted);font-weight:700;margin-right:6px">${rank}</span>`;
 
-function getSortedData(data) {
-  const keyMap = { storeName:'store', score:'score', grade:'expectedGrade', hs:'hs', wire:'wire', visit:'visit', nps:'nps', penalty:'penalty' };
-  const field = keyMap[sortKey] || 'score';
-  return [...data].sort((a,b) => {
-    let va = a[field], vb = b[field];
-    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
-    return sortAsc ? va - vb : vb - va;
-  });
-}
+    const arrow = gradeArrow(row.당월예상등급, row.최근3개월등급);
+    const col = AGENCY_COLORS[row.대리점명] || {accent:"#E60012"};
 
-// ══════════════════════════════════════════════
-//  GRADE ARROW (당월 vs 최근3개월)
-// ══════════════════════════════════════════════
-function gradeArrow(d) {
-  const diff = d.recent3Grade - d.expectedGrade; // 양수 = 등급 상승(숫자 낮을수록 좋음)
-  if (diff > 0) return '<span class="arrow-up" title="등급 상승">▲</span>';
-  if (diff < 0) return '<span class="arrow-down" title="등급 하락">▼</span>';
-  return '<span class="arrow-same" title="등급 유지">─</span>';
-}
-
-// ══════════════════════════════════════════════
-//  SCORE COLOR
-// ══════════════════════════════════════════════
-function scoreColor(s) {
-  if (s >= 80) return 'score-high';
-  if (s >= 60) return 'score-mid';
-  return 'score-low';
-}
-
-// ══════════════════════════════════════════════
-//  RENDER TABLE
-// ══════════════════════════════════════════════
-function renderTable() {
-  const filtered = getFilteredData();
-  const sorted = getSortedData(filtered);
-  const tbody = document.getElementById('tableBody');
-  if (sorted.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="9" class="empty-msg">해당 조건의 매장이 없습니다.</td></tr>`;
-    return;
-  }
-  let html = '';
-  sorted.forEach((d, idx) => {
-    const rank = idx + 1;
-    let rankClass = '';
-    let rankBadge = `<span class="rank-badge rank-badge-n">${rank}</span>`;
-    if (rank === 1) { rankClass = 'rank-1'; rankBadge = `<span class="rank-badge rank-badge-1">1</span>`; }
-    else if (rank === 2) { rankClass = 'rank-2'; rankBadge = `<span class="rank-badge rank-badge-2">2</span>`; }
-    else if (rank === 3) { rankClass = 'rank-3'; rankBadge = `<span class="rank-badge rank-badge-3">3</span>`; }
-
-    const arrow = gradeArrow(d);
-    const gradeSpan = `<span class="grade-${d.expectedGrade}">${d.expectedGrade}등급</span>`;
-    const levelSpan = d.levelUp === 'Y' ? '<span class="level-y">Y</span>' : '<span class="level-n">N</span>';
-    const sc = scoreColor(d.score);
-
-    html += `<tr class="${rankClass}">
-      <td data-tooltip="대리점: ${d.agency} | 매장코드: ${d.code} | 최근3개월 종합: ${d.recent3Score.toFixed(2)} | 최근3개월 등급: ${d.recent3Grade}등급 | 레벨업: ${d.levelUp}">
-        ${rankBadge}<strong>${d.store}</strong><br>
-        <span style="font-size:0.72rem;color:#9E9E9E;font-weight:400;">${d.agency}</span>
+    html += `
+    <tr class="${rankClass}">
+      <td style="font-weight:700;text-align:center">${rankBadge}</td>
+      <td class="store-cell">
+        <div data-tooltip="대리점: ${row.대리점명} | 매장코드: ${row.매장코드} | 최근3개월 종합점수: ${fmt(row.최근3개월종합점수)} | 최근3개월 등급: ${row.최근3개월등급}등급">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${col.accent};margin-right:6px;vertical-align:middle"></span>
+          ${row.매장명}
+          <span style="font-size:0.72rem;color:var(--text-muted);margin-left:4px">${row.대리점명}</span>
+        </div>
       </td>
-      <td class="score-cell ${sc}"
-          data-tooltip="당월 종합점수 = H/S판매(${d.hs.toFixed(2)}) + 유선(${d.wire.toFixed(2)}) + 내방고객(${d.visit.toFixed(2)}) + NPS(${d.nps.toFixed(2)}) - 위반(${d.penalty})">
-        ${d.score.toFixed(2)}
-      </td>
-      <td data-tooltip="당월 예상 등급: ${d.expectedGrade}등급 | 최근3개월 등급: ${d.recent3Grade}등급 | 레벨업 대상: ${d.levelUp}">
-        ${gradeSpan} ${arrow} ${levelSpan}
-      </td>
-      <td>
-        <button class="ai-btn" onclick="showAI('${d.store.replace(/'/g,"\\'")}')">🤖 AI 분석</button>
-      </td>
-      <td data-tooltip="H/S판매 원데이터: ${d.hs_raw}건 | MNP: ${d.mnp}건 (1.2배 가중치 적용)">
-        ${d.hs.toFixed(2)}
-      </td>
-      <td data-tooltip="유선 원데이터: ${d.wire_raw}건">
-        ${d.wire.toFixed(2)}
-      </td>
-      <td data-tooltip="내방고객 원데이터: ${d.visit_raw}명 | 타사단골: ${d.rival}명 (가점 포함)">
-        ${d.visit.toFixed(2)}
-      </td>
-      <td data-tooltip="NPS 원데이터: ${d.nps_raw.toFixed(2)}%">
-        ${d.nps.toFixed(2)}
-      </td>
-      <td data-tooltip="고객정보보호이행점검위반 건수: ${d.violation}건 (감점 적용)">
-        <span style="color:${d.penalty < 0 ? '#E60012' : '#2E7D32'};font-weight:700;">${d.penalty}</span>
-      </td>
+      <td class="score-cell" data-tooltip="Raw 가중치 합산: H/S판매(${fmt(row.HS가중)})+유선(${fmt(row.유선가중)})+내방(${fmt(row.내방가중)})+NPS(${fmt(row.NPS가중)})-위반(${fmt(row.위반감점)})">${fmt(row.종합점수)}</td>
+      <td data-tooltip="최근3개월 등급: ${row.최근3개월등급}등급 → 당월 예상: ${row.당월예상등급}등급">${gradeLbl(row.당월예상등급)} ${arrow}</td>
+      <td><button class="ai-btn" onclick="showAI('${row.매장명.replace(/'/g,"\\'")}')">🤖 AI 분석</button></td>
+      <td data-tooltip="H/S판매: ${row.HS판매}건 | MNP: ${row.MNP}건 (1.2배 가중)">${fmt(row.HS가중)}</td>
+      <td data-tooltip="유선 Raw: ${row.유선}건">${fmt(row.유선가중)}</td>
+      <td data-tooltip="내방고객: ${row.내방고객}명 | 타사단골: ${row.타사단골}명 (가점 포함)">${fmt(row.내방가중)}</td>
+      <td data-tooltip="NPS Raw: ${fmt(row.NPS,2)}%">${fmt(row.NPS가중)}</td>
+      <td data-tooltip="위반 건수: ${row.위반}건" style="color:${row.위반감점<0?'#dc2626':'#059669'}">${fmt(row.위반감점)}</td>
     </tr>`;
   });
-  tbody.innerHTML = html;
+
+  html += `</tbody></table></div>`;
+  container.innerHTML = html;
 }
 
-// ══════════════════════════════════════════════
-//  AI COMMENT
-// ══════════════════════════════════════════════
+// ============================================================
+// AI COMMENT
+// ============================================================
 function showAI(storeName) {
-  const d = RAW_DATA.find(r => r.store === storeName);
-  if (!d) return;
-  document.getElementById('modalTitle').textContent = `🤖 AI 코멘트 — ${d.store}`;
-  document.getElementById('modalContent').innerHTML = generateAIComment(d);
+  const row = RAW_DATA.find(d=>d.매장명===storeName);
+  if(!row) return;
+
+  const grade = row.당월예상등급;
+  const score = row.종합점수;
+  const prevGrade = row.최근3개월등급;
+
+  // Score gaps analysis
+  const maxHS = 40, maxYuSeon = 10, maxNaeBang = 32, maxNPS = 20;
+  const gapHS = maxHS - row.HS가중;
+  const gapYS = maxYuSeon - row.유선가중;
+  const gapNB = maxNaeBang - row.내방가중;
+  const gapNPS = maxNPS - row.NPS가중;
+
+  // Grade thresholds (approximate)
+  const grade1Threshold = 80;
+  const grade2Threshold = 60;
+
+  let targetGrade, neededScore, comment;
+
+  if(grade===3) {
+    targetGrade = 2;
+    neededScore = grade2Threshold - score;
+    comment = `현재 <strong>3등급</strong> (종합점수: ${fmt(score)})으로, <strong>2등급 달성</strong>을 위해 약 <strong>${fmt(neededScore > 0 ? neededScore : 0)}점</strong> 추가 확보가 필요합니다.`;
+  } else if(grade===2) {
+    targetGrade = 1;
+    neededScore = grade1Threshold - score;
+    comment = `현재 <strong>2등급</strong> (종합점수: ${fmt(score)})으로, <strong>1등급 달성</strong>을 위해 약 <strong>${fmt(neededScore > 0 ? neededScore : 0)}점</strong> 추가 확보가 필요합니다.`;
+  } else {
+    comment = `현재 <strong>1등급</strong> (종합점수: ${fmt(score)})으로 최고 등급을 유지 중입니다. 지속적인 성과 관리가 중요합니다.`;
+  }
+
+  // Priority recommendations
+  const gaps = [
+    {name:"H/S판매(MNP 1.2배)", gap:gapHS, current:row.HS가중, max:maxHS, raw:`H/S판매 ${row.HS판매}건, MNP ${row.MNP}건`},
+    {name:"유선", gap:gapYS, current:row.유선가중, max:maxYuSeon, raw:`유선 ${row.유선}건`},
+    {name:"내방고객(타사단골 가점)", gap:gapNB, current:row.내방가중, max:maxNaeBang, raw:`내방 ${row.내방고객}명, 타사단골 ${row.타사단골}명`},
+    {name:"NPS", gap:gapNPS, current:row.NPS가중, max:maxNPS, raw:`NPS ${fmt(row.NPS,1)}%`}
+  ].sort((a,b)=>b.gap-a.gap);
+
+  let recHtml = '<ul>';
+  gaps.forEach(g => {
+    const pct = ((g.current/g.max)*100).toFixed(0);
+    const priority = g.gap > 10 ? '🔴 최우선' : g.gap > 5 ? '🟡 중요' : '🟢 양호';
+    recHtml += `<li><strong>${g.name}</strong> ${priority}<br>
+      현재: ${fmt(g.current)} / 최대: ${g.max} (달성률 ${pct}%) — ${g.raw}<br>
+      <em>개선 여지: +${fmt(g.gap)}점</em></li>`;
+  });
+  recHtml += '</ul>';
+
+  // Specific action items
+  let actions = '<ul>';
+  if(row.MNP < 5) actions += `<li>📱 <strong>MNP 유치 강화</strong>: 현재 ${row.MNP}건 → 목표 10건 이상. 타사 고객 대상 전환 프로모션 적극 활용</li>`;
+  if(row.유선 < 5) actions += `<li>📞 <strong>유선 가입 확대</strong>: 현재 ${row.유선}건 → 내방 고객 대상 유선 결합 상품 안내 강화</li>`;
+  if(row.타사단골 < 10) actions += `<li>🎯 <strong>타사단골 확보</strong>: 현재 ${row.타사단골}명 → 타사 고객 DB 관리 및 재방문 유도 캠페인 실시</li>`;
+  if(row.NPS < 90) actions += `<li>⭐ <strong>NPS 점수 향상</strong>: 현재 ${fmt(row.NPS,1)}% → 고객 만족도 제고, 불만 고객 사후 관리 강화</li>`;
+  if(row.내방고객 < 200) actions += `<li>👥 <strong>내방고객 증대</strong>: 현재 ${row.내방고객}명 → SNS 마케팅, 지역 커뮤니티 활동 강화</li>`;
+  if(row.위반 > 0) actions += `<li>⚠️ <strong>고객정보보호 위반 Zero화</strong>: 현재 ${row.위반}건 → 즉시 개선 필요</li>`;
+  if(actions === '<ul>') actions += `<li>✅ 전반적으로 양호한 수준입니다. 현재 성과를 유지하며 약점 지표를 지속 모니터링하세요.</li>`;
+  actions += '</ul>';
+
+  const gradeChange = prevGrade > grade ? `<span style="color:#059669">▲ ${prevGrade}등급 → ${grade}등급 (상승)</span>` :
+                      prevGrade < grade ? `<span style="color:#dc2626">▼ ${prevGrade}등급 → ${grade}등급 (하락)</span>` :
+                      `<span style="color:#6b7280">─ ${grade}등급 유지</span>`;
+
+  document.getElementById('modalTitle').innerHTML = `🤖 AI 분석 리포트 — ${storeName}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="highlight">
+      <strong>📊 등급 변화:</strong> ${gradeChange}<br>
+      <strong>🎯 목표:</strong> ${comment}
+    </div>
+    <h4 style="margin:14px 0 6px;color:#1a1a2e">📈 KPI 달성 현황 및 개선 우선순위</h4>
+    ${recHtml}
+    <h4 style="margin:14px 0 6px;color:#1a1a2e">💡 등급 상향을 위한 실행 과제</h4>
+    ${actions}
+    <div style="margin-top:14px;padding:10px;background:#f8fafc;border-radius:8px;font-size:0.82rem;color:#6b7280">
+      ※ 본 분석은 2026-04-22 기준 데이터를 바탕으로 AI가 자동 생성한 내용입니다.
+    </div>`;
   document.getElementById('aiModal').classList.add('open');
 }
 
@@ -491,112 +564,39 @@ function closeModal() {
   document.getElementById('aiModal').classList.remove('open');
 }
 document.getElementById('aiModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
+  if(e.target===this) closeModal();
 });
 
-function generateAIComment(d) {
-  const gradeLabel = ['', '1등급(최우수)', '2등급(우수)', '3등급(일반)'];
-  const currentGrade = d.expectedGrade;
-  const prevGrade = d.recent3Grade;
-  const diff = prevGrade - currentGrade;
-
-  // 각 항목 분석
-  const hsRatio = d.hs / 40 * 100;
-  const wireRatio = d.wire / 10 * 100;
-  const visitRatio = d.visit / 32 * 100;
-  const npsRatio = d.nps / 20 * 100;
-
-  // 약점 분석
-  const weakPoints = [];
-  const strongPoints = [];
-
-  if (hsRatio < 60) weakPoints.push({ name: 'H/S판매(MNP 포함)', val: d.hs.toFixed(2), max: 40, tip: `현재 ${d.hs_raw}건 판매 중. MNP ${d.mnp}건 포함. 목표 대비 ${(40-d.hs).toFixed(2)}점 부족.` });
-  else strongPoints.push(`H/S판매 ${d.hs.toFixed(2)}점 (목표 대비 ${hsRatio.toFixed(0)}%)`);
-
-  if (wireRatio < 60) weakPoints.push({ name: '유선', val: d.wire.toFixed(2), max: 10, tip: `현재 ${d.wire_raw}건. 목표 대비 ${(10-d.wire).toFixed(2)}점 부족.` });
-  else strongPoints.push(`유선 ${d.wire.toFixed(2)}점 (목표 대비 ${wireRatio.toFixed(0)}%)`);
-
-  if (visitRatio < 60) weakPoints.push({ name: '내방고객(타사단골)', val: d.visit.toFixed(2), max: 32, tip: `내방 ${d.visit_raw}명, 타사단골 ${d.rival}명. 목표 대비 ${(32-d.visit).toFixed(2)}점 부족.` });
-  else strongPoints.push(`내방고객 ${d.visit.toFixed(2)}점 (목표 대비 ${visitRatio.toFixed(0)}%)`);
-
-  if (npsRatio < 70) weakPoints.push({ name: 'NPS', val: d.nps.toFixed(2), max: 20, tip: `NPS ${d.nps_raw.toFixed(1)}%. 고객 만족도 향상 필요.` });
-  else strongPoints.push(`NPS ${d.nps.toFixed(2)}점 (${d.nps_raw.toFixed(1)}%)`);
-
-  // 등급 상향 조건
-  let upgradeMsg = '';
-  if (currentGrade === 1) {
-    upgradeMsg = `<li>✅ 현재 <strong>1등급(최우수)</strong>을 유지 중입니다. 지속적인 성과 관리가 필요합니다.</li>`;
-  } else if (currentGrade === 2) {
-    const need = 80 - d.score;
-    upgradeMsg = `<li>🎯 <strong>1등급 달성</strong>을 위해 약 <strong>${need > 0 ? need.toFixed(2) + '점'  : '이미 충족'}</strong> 추가 점수가 필요합니다.</li>
-    <li>📌 H/S판매 강화(MNP 유치 집중), 유선 가입 확대, 내방고객 증대가 핵심입니다.</li>`;
-  } else {
-    const need2 = 60 - d.score;
-    const need1 = 80 - d.score;
-    upgradeMsg = `<li>🎯 <strong>2등급 달성</strong>을 위해 약 <strong>${need2 > 0 ? need2.toFixed(2) + '점' : '이미 충족'}</strong> 추가 점수가 필요합니다.</li>
-    <li>🎯 <strong>1등급 달성</strong>을 위해 약 <strong>${need1 > 0 ? need1.toFixed(2) + '점' : '이미 충족'}</strong> 추가 점수가 필요합니다.</li>`;
-  }
-
-  // 레벨업 대상 메시지
-  const levelMsg = d.levelUp === 'Y'
-    ? `<li>⭐ <strong>레벨업 대상 매장</strong>입니다. 이번 달 집중 관리로 등급 상향 가능성이 높습니다!</li>`
-    : `<li>ℹ️ 현재 레벨업 대상이 아닙니다. 꾸준한 성과 유지가 중요합니다.</li>`;
-
-  // 등급 변화 메시지
-  let trendMsg = '';
-  if (diff > 0) trendMsg = `<li>📈 최근 3개월 ${prevGrade}등급 → 당월 예상 <strong>${currentGrade}등급</strong>으로 <span style="color:#E60012;font-weight:700;">등급 상승</span> 추세입니다!</li>`;
-  else if (diff < 0) trendMsg = `<li>📉 최근 3개월 ${prevGrade}등급 → 당월 예상 <strong>${currentGrade}등급</strong>으로 <span style="color:#1565C0;font-weight:700;">등급 하락</span> 추세입니다. 즉각적인 개선이 필요합니다.</li>`;
-  else trendMsg = `<li>📊 최근 3개월과 동일한 <strong>${currentGrade}등급</strong>을 유지 중입니다.</li>`;
-
-  // 약점 항목 개선 제안
-  let weakHtml = '';
-  if (weakPoints.length > 0) {
-    weakHtml = `<li>🔴 <strong>개선 필요 항목:</strong><ul style="margin-top:6px;">` +
-      weakPoints.map(w => `<li><strong>${w.name}</strong>: ${w.val}점 / ${w.max}점 — ${w.tip}</li>`).join('') +
-      `</ul></li>`;
-  }
-
-  let strongHtml = '';
-  if (strongPoints.length > 0) {
-    strongHtml = `<li>🟢 <strong>강점 항목:</strong> ${strongPoints.join(', ')}</li>`;
-  }
-
-  // MNP 특이사항
-  let mnpMsg = '';
-  if (d.mnp >= 10) mnpMsg = `<li>💡 MNP ${d.mnp}건으로 <strong>타사 전환 유치가 우수</strong>합니다. 지속 유지 권장.</li>`;
-  else if (d.mnp < 3) mnpMsg = `<li>💡 MNP ${d.mnp}건으로 타사 전환 유치가 저조합니다. <strong>MNP 집중 캠페인</strong>을 권장합니다.</li>`;
-
-  // 타사단골 메시지
-  let rivalMsg = '';
-  if (d.rival >= 10) rivalMsg = `<li>💡 타사단골 ${d.rival}명으로 <strong>경쟁사 고객 유입이 활발</strong>합니다.</li>`;
-  else if (d.rival === 0) rivalMsg = `<li>💡 타사단골 0명입니다. <strong>경쟁사 고객 대상 프로모션</strong>을 강화하세요.</li>`;
-
-  return `<ul>
-    <li>📋 <strong>매장:</strong> ${d.store} (${d.agency}) | 당월 종합점수: <strong>${d.score.toFixed(2)}점</strong></li>
-    <li>🏅 <strong>당월 예상 등급:</strong> <span class="grade-${currentGrade}">${gradeLabel[currentGrade]}</span></li>
-    ${trendMsg}
-    ${levelMsg}
-    ${upgradeMsg}
-    ${weakHtml}
-    ${strongHtml}
-    ${mnpMsg}
-    ${rivalMsg}
-    ${d.penalty < 0 ? `<li>⚠️ 고객정보보호 위반 감점(${d.penalty}점)이 발생했습니다. <strong>즉시 시정 조치</strong>가 필요합니다.</li>` : ''}
-    <li>📌 <strong>종합 제언:</strong> ${getOverallAdvice(d)}</li>
-  </ul>`;
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
 }
 
-function getOverallAdvice(d) {
-  if (d.expectedGrade === 1) return `최우수 등급을 유지하고 있습니다. H/S판매와 내방고객 관리를 지속하며 NPS 고객 만족도를 높게 유지하세요.`;
-  if (d.expectedGrade === 2 && d.recent3Grade === 1) return `이전 1등급에서 하락했습니다. H/S판매(MNP 포함) 강화와 유선 가입 확대에 집중하여 1등급 복귀를 목표로 하세요.`;
-  if (d.expectedGrade === 2) return `2등급 유지 중입니다. MNP 유치 강화, 유선 가입 확대, 타사단골 고객 관리를 통해 1등급 진입을 노려보세요.`;
-  if (d.levelUp === 'Y') return `레벨업 대상 매장입니다. H/S판매 집중, 내방고객 증대, NPS 관리를 통해 이번 달 등급 상향을 달성하세요!`;
-  return `H/S판매 확대(MNP 유치 집중), 유선 가입 증대, 내방고객 및 타사단골 관리를 통해 단계적 등급 상향을 추진하세요.`;
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  buildTopCards();
+
+  const levelupY = RAW_DATA.filter(d=>d.레벨업==='Y');
+  const levelupN = RAW_DATA.filter(d=>d.레벨업==='N');
+  const grade1 = RAW_DATA.filter(d=>d.당월예상등급===1);
+  const grade2 = RAW_DATA.filter(d=>d.당월예상등급===2);
+  const grade3 = RAW_DATA.filter(d=>d.당월예상등급===3);
+
+  buildTable(levelupY, 'tab-levelup-y');
+  buildTable(levelupN, 'tab-levelup-n');
+  buildTable(grade1, 'tab-grade1');
+  buildTable(grade2, 'tab-grade2');
+  buildTable(grade3, 'tab-grade3');
+  buildTable(RAW_DATA, 'tab-all');
 }
 
-// ══════════════════════════════════════════════
-//  START
-// ══════════════════════════════════════════════
 init();
 </script>
 </body>
